@@ -1,78 +1,65 @@
-# Unit 2 Docker Commands
+# Unit II: Image Building & Container Management
 
-## Basic
-| Command | Purpose |
-|---|---|
-| `docker version` | Show Docker client and server versions |
-| `docker info` | Show detailed Docker system information |
-| `docker help` | Display Docker help |
+## 1. Dockerfile Core Concepts
+*   **Image layering:** Each instruction adds a new layer.
+*   **Build context & .dockerignore:** Files sent to the daemon during build.
+*   **Dockerfile writing:** Best practices for writing efficient Dockerfiles.
 
-## Containers
-| Command | Purpose |
-|---|---|
-| `docker run nginx` | Run an Nginx container |
-| `docker run -it ubuntu bash` | Start an interactive Ubuntu shell |
-| `docker run -d nginx` | Run a container in detached mode |
-| `docker run -p 8080:80 nginx` | Map host port 8080 to container port 80 |
-| `docker run --name mycontainer nginx` | Run a container with a custom name |
-| `docker run -m 512m nginx` | Limit container memory to 512 MB |
-| `docker run --cpus="1.5" nginx` | Limit container CPU usage |
-| `docker ps` | List running containers |
-| `docker ps -a` | List all containers |
-| `docker stop <container_id>` | Stop a running container |
-| `docker start <container_id>` | Start a stopped container |
-| `docker restart <container_id>` | Restart a container |
-| `docker kill <container_id>` | Force stop a container |
-| `docker rm <container_id>` | Remove a container |
-| `docker exec -it <container_id> bash` | Open a shell inside a running container |
-| `docker logs <container_id>` | View container logs |
+## 2. Basic Instructions
+*   `FROM`: Base image.
+*   `RUN`: Execute commands in a new layer.
+*   `COPY`: Copy files from host to container.
+*   `ADD`: Like COPY, but can handle remote URLs and tar extraction.
+*   `CMD`: Default command for the container.
+*   `ENTRYPOINT`: Configures a container that will run as an executable.
+*   `WORKDIR`: Sets the working directory.
+*   `ENV`: Sets environment variables.
+*   `EXPOSE`: Informs Docker that the container listens on specified network ports.
+*   `VOLUME`: Creates a mount point for persistent storage.
 
-## Images
-| Command | Purpose |
-|---|---|
-| `docker images` | List local images |
-| `docker pull nginx` | Download the Nginx image |
-| `docker push username/image` | Upload an image to a registry |
-| `docker rmi <image_id>` | Remove a local image |
-| `docker build -t myapp:1.0 .` | Build an image from the current directory |
-| `docker tag myapp:1.0 myapp:latest` | Add a new tag to an image |
-| `docker inspect <image_id>` | View detailed image information |
-| `docker history <image_name>` | View image layer history |
-| `docker build -t myimage .` | Build an image from a Dockerfile |
+## 3. Image Creation in Detail
+*   `docker build`: The process of building an image from a Dockerfile.
+*   **Tagging/Versioning:** `docker tag <image> <name>:<version>`.
+*   **Inspecting Images:** `docker image inspect`, `docker history`.
 
-## Networking
-| Command | Purpose |
-|---|---|
-| `docker network ls` | List Docker networks |
-| `docker network create mynet` | Create a network named mynet |
-| `docker network inspect mynet` | Show network details |
-| `docker network rm mynet` | Remove a network |
-| `docker run -d --network=mynet nginx` | Run a container on a custom network |
-| `docker run --network host nginx` | Use the host network stack |
-| `docker run -p 8080:80 nginx` | Publish container port 80 on host port 8080 |
+## 4. Docker Networking
+*   **Bridge network:** Default network for containers.
+*   **Host network:** Containers share the host's networking namespace.
+*   **Overlay network:** Connects multiple Docker daemons (used in Swarm).
+*   **DNS inside Docker:** Automatic service discovery.
+*   **Linking containers:** The legacy way (now use networks).
+*   **Port mapping:** `-p <host_port>:<container_port>`.
 
-## Volumes and Storage
-| Command | Purpose |
-|---|---|
-| `docker volume ls` | List volumes |
-| `docker volume create myvol` | Create a named volume |
-| `docker volume inspect myvol` | Show volume details |
-| `docker volume rm myvol` | Remove a volume |
-| `docker run -v myvol:/data nginx` | Mount a named volume into a container |
-| `docker run -v /host/path:/container/path nginx` | Mount a host directory into a container |
+## 5. Docker Storage
+*   **Volumes:** Managed by Docker (best for persistence).
+*   **Bind mounts:** Use host filesystem paths.
+*   **Copy-on-write:** How Docker manages file changes across layers.
 
-## Registry
-| Command | Purpose |
-|---|---|
-| `docker login` | Sign in to a registry |
-| `docker logout` | Sign out from a registry |
-| `docker pull nginx` | Download an image from a registry |
-| `docker push username/image` | Upload an image to a registry |
+---
 
-## Daemon and Service
-| Command | Purpose |
-|---|---|
-| `systemctl start docker` | Start the Docker service on Linux |
-| `systemctl stop docker` | Stop the Docker service on Linux |
-| `systemctl restart docker` | Restart the Docker service on Linux |
-| `systemctl status docker` | Check Docker service status on Linux |
+## Unit II Practical Commands
+
+### Building and Managing Images
+```bash
+# Build an image
+docker build -t my-app:v1 .
+
+# Tag an image
+docker tag my-app:v1 my-repo/my-app:latest
+
+# View history
+docker history my-app:v1
+```
+
+### Networking & Storage
+```bash
+# Create a bridge network
+docker network create my-bridge
+
+# Run with port mapping and volume
+docker run -d -p 8080:80 -v my-vol:/app/data --name my-container nginx
+
+# Inspect network
+docker network inspect my-bridge
+```
+

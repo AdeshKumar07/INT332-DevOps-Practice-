@@ -1,95 +1,83 @@
-# Unit I Docker Commands
+# Unit I: Basics of DevOps Infrastructure
 
-## General
-| Command | Purpose |
-|---|---|
-| `docker --help` | Show Docker help and command list |
-| `docker version` | Display Docker client and server versions |
-| `docker info` | Show detailed Docker system information |
+## 1. Introduction to Containers
+*   **Origin of containers:** Early isolation methods like `chroot` (1979).
+*   **Emergence of Modern Containerization:** Solaris Zones, FreeBSD Jails, and eventually LXC (LinuX Containers).
+*   **Integration into DevOps:** How containers bridge the "it works on my machine" gap.
 
-## Authentication and Registry
-| Command | Purpose |
-|---|---|
-| `docker login [registry]` | Sign in to a Docker registry |
-| `docker logout [registry]` | Sign out from a Docker registry |
-| `docker search <term>` | Search for images in a registry |
-| `docker pull <image>[:tag]` | Download an image from a registry |
-| `docker push <image>[:tag]` | Upload an image to a registry |
+## 2. Container Runtime
+The component that runs containers (e.g., `containerd`, `CRI-O`, `Docker Engine`).
 
-## Images
-| Command | Purpose |
-|---|---|
-| `docker images` | List local images |
-| `docker image ls` | List local images |
-| `docker image inspect <image>` | Show detailed image metadata |
-| `docker image history <image>` | Show image layer history |
-| `docker build -t <name>:<tag> <path>` | Build an image from a Dockerfile |
-| `docker image tag <source> <target>` | Add a new tag to an image |
-| `docker image rm <image>` | Remove a local image |
-| `docker image prune` | Remove unused image layers |
-| `docker save -o <file.tar> <image>` | Save an image as a tar archive |
-| `docker load -i <file.tar>` | Load an image from a tar archive |
+## 3. Process Isolation & Namespaces
+Linux kernel features that provide isolation:
+*   `pid`: Process IDs
+*   `net`: Network stack
+*   `mnt`: Mount points
+*   `uts`: Hostname and NIS domain name
+*   `ipc`: Interprocess communication
+*   `user`: User and Group IDs
 
-## Containers
-| Command | Purpose |
-|---|---|
-| `docker ps` | List running containers |
-| `docker ps -a` | List all containers |
-| `docker run [options] <image> [command]` | Create and start a container |
-| `docker start <container>` | Start a stopped container |
-| `docker stop <container>` | Stop a running container |
-| `docker restart <container>` | Restart a container |
-| `docker kill <container>` | Force stop a container |
-| `docker rm <container>` | Remove a container |
-| `docker exec -it <container> <command>` | Run a command inside a running container |
-| `docker logs <container>` | View container logs |
-| `docker attach <container>` | Attach to a running container |
-| `docker inspect <container>` | Show detailed container metadata |
-| `docker stats` | View live container resource usage |
-| `docker top <container>` | View processes running inside a container |
-| `docker wait <container>` | Wait until a container stops |
-| `docker pause <container>` | Pause container processes |
-| `docker unpause <container>` | Resume a paused container |
-| `docker rename <old> <new>` | Rename a container |
-| `docker cp <container>:<path> <host_path>` | Copy files from container to host |
-| `docker cp <host_path> <container>:<path>` | Copy files from host to container |
-| `docker commit <container> <image>:<tag>` | Create an image from a container |
-| `docker update --cpus <n> --memory <size> <container>` | Update container resource limits |
-| `docker export -o <file.tar> <container>` | Export container filesystem to tar |
-| `docker import <file.tar> <image>:<tag>` | Import a tar archive as an image |
+## 4. Control Groups (cgroups)
+Used for limiting and monitoring resources (CPU, Memory, I/O).
 
-## Networking
-| Command | Purpose |
-|---|---|
-| `docker network ls` | List Docker networks |
-| `docker network create <network>` | Create a network |
-| `docker network inspect <network>` | Show network details |
-| `docker network connect <network> <container>` | Connect a container to a network |
-| `docker network disconnect <network> <container>` | Disconnect a container from a network |
-| `docker network rm <network>` | Remove a network |
-| `docker network prune` | Remove unused networks |
+## 5. Container Images & Layers
+Images are read-only templates. Layers are formed by each instruction in a Dockerfile.
 
-## Volumes and Storage
-| Command | Purpose |
-|---|---|
-| `docker volume ls` | List Docker volumes |
-| `docker volume create <volume>` | Create a volume |
-| `docker volume inspect <volume>` | Show volume details |
-| `docker volume rm <volume>` | Remove a volume |
-| `docker volume prune` | Remove unused volumes |
-| `docker run -v <volume>:/container/path <image>` | Mount a named volume into a container |
-| `docker run -v /host/path:/container/path <image>` | Mount a host folder into a container |
+## 6. Image Registries & Distribution
+Places to store and share images (e.g., Docker Hub, Amazon ECR).
 
-## System and Cleanup
-| Command | Purpose |
-|---|---|
-| `docker system df` | Show Docker disk usage |
-| `docker system prune` | Remove unused Docker objects |
-| `docker system events` | Show Docker events in real time |
+## 7. Introduction to Docker
+Docker is a platform for developing, shipping, and running applications in containers.
 
-## Common Examples
-| Command | Purpose |
-|---|---|
-| `docker run --name web -p 8080:80 nginx:latest` | Run Nginx and expose port 80 on host port 8080 |
-| `docker run -it --rm alpine:latest sh` | Start a temporary interactive Alpine shell |
-| `docker run -d --name api --cpus 1 --memory 512m myapp:1.0` | Run an app in detached mode with resource limits |
+## 8. Docker Architecture
+Client-Server architecture. The Docker Client talks to the Docker Daemon (`dockerd`).
+
+## 9. Docker Daemon
+The background process that manages Docker objects.
+
+## 10. Docker CLI
+The command-line interface for interacting with the Docker Daemon.
+
+## 11. Docker Registry & Hub
+Docker Hub is the default public registry.
+
+## 12. Object Types
+*   **Container:** A runnable instance of an image.
+*   **Image:** Read-only template for creating containers.
+*   **Network:** Provides connectivity between containers.
+*   **Volume:** Persistent data storage.
+
+## 13. Docker Layering & Filesystem
+Uses Union File System (UnionFS) to stack layers.
+
+---
+
+## Unit I Practical Commands
+
+### Checking Docker Status
+```bash
+# Check version
+docker version
+
+# System info
+docker info
+```
+
+### Basic Imagery & Container Operations
+```bash
+# Pull an image
+docker pull alpine
+
+# List images
+docker images
+
+# Run a container
+docker run -it alpine /bin/sh
+
+# List running containers
+docker ps
+
+# Inspect an image
+docker image inspect alpine
+```
+
